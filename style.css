@@ -1,3 +1,16 @@
+body {
+    background-color: #fafafc;
+}
+
+#keys {
+    background-color: white;
+    width: 900px;
+    height: 750px;
+    border-style: solid;
+    border-width: 4px;
+    background-image: url('bg.png');
+}
+
 .notekey {
     background-color: #2C8F90;
     border: none;
@@ -24,7 +37,7 @@
     height: 60px;
     margin: 40px 40px;
     font-size: 21px;
-    background-color: #5C8F90;
+    background-color: #5C8FC0;
 }
 
 .notekey:active {

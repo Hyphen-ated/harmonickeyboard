@@ -4,26 +4,34 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Harmonic Lattice Keyboard</title>
 </head>
+This is a playable keyboard in <a href="https://en.wikipedia.org/wiki/Just_intonation">Just Intonation</a>, with keys positioned
+according to their harmonic relationships.<br>
+It's based on <a href="https://www.youtube.com/watch?v=jA1C9VFqJKo">this video visualizing the harmony of a song,</a>
+and on the <a href="http://www.garygarrett.me/?page_id=1922">blog posts explaining it.</a><br>
+You can click the notes or use your qwerty keyboard. Hold shift or space when starting a note to move it up or down one octave.<br>
+Moving east represents going up a fifth. Moving northeast represents going up a major third. All the notes are shifted to be the same octave as the tonic.<br>
+(You get the blue notes by multiplying the pitch by 7. They're not in the standard western scale.)<br>
+The tonic is <input id="tonicInput" type="number" value="261.63" step="0.01" onchange="updateTonic()">hz. 
+Or set it by name: <select id="keyDropdown" onchange="updateTonicDropdown()"></select>
 
-<p>The tonic is <input id="tonicInput" type="number" value="261.63" step="0.01" onchange="updateTonic()">hz</p>
 <div id="keys">
     <div id="row1" class="keyrow">
-        <button id="#7" class="notekey">#7<br><u>6</u></button>
+        <button id="#7" class="notekey">♯7<br><u>6</u></button>
     </div>
     <div id="row2" class="keyrow">
-        <button id="#1" class="notekey">#1<br><u>3</u></button>
-        <button id="#5" class="notekey">#5<br><u>4</u></button>
-        <button id="#2" class="notekey">#2<br><u>5</u></button>
+        <button id="#1" class="notekey">♯1<br><u>3</u></button>
+        <button id="#5" class="notekey">♯5<br><u>4</u></button>
+        <button id="#2" class="notekey">♯2<br><u>5</u></button>
     </div>
     <div id="row3" class="keyrow">
         <button id="2-" class="notekey">2-<br><u>W</u></button>
         <button id="6" class="notekey">6<br><u>E</u></button>
         <button id="3" class="notekey">3<br><u>R</u></button>
         <button id="7" class="notekey">7<br><u>T</u></button>
-        <button id="#4+" class="notekey">#4+<br><u>Y</u></button>
+        <button id="#4+" class="notekey">♯4+<br><u>Y</u></button>
     </div>
     <div id="row4" class="keyrow">
-        <button id="b7-" class="notekey">b7-<br><u>A</u></button>
+        <button id="b7-" class="notekey">♭7-<br><u>A</u></button>
         <button id="4" class="notekey">4<br><u>S</u></button>
         <button id="1" class="notekey">1<br><u>D</u></button>
         <button id="5" class="notekey">5<br><u>F</u></button>
@@ -31,18 +39,18 @@
         <button id="6+" class="notekey">6+<br><u>H</u></button>
     </div>
     <div id="row5" class="keyrow">
-        <button id="b2-" class="notekey">b2-<br><u>Z</u></button>
-        <button id="b6" class="notekey">b6<br><u>X</u></button>
-        <button id="b3" class="notekey">b3<br><u>C</u></button>
-        <button id="b7" class="notekey">b7<br><u>V</u></button>
+        <button id="b2-" class="notekey">♭2-<br><u>Z</u></button>
+        <button id="b6" class="notekey">♭6<br><u>X</u></button>
+        <button id="b3" class="notekey">♭3<br><u>C</u></button>
+        <button id="b7" class="notekey">♭7<br><u>V</u></button>
     </div>
     <div id="row6" class="keyrow">
-        <button id="7b3" class="notekey septimal">7b3<br><u>J</u></button>
-        <button id="7b7" class="notekey septimal">7b7<br><u>K</u></button>
+        <button id="7b3" class="notekey septimal">7♭3<br><u>J</u></button>
+        <button id="7b7" class="notekey septimal">7♭7<br><u>K</u></button>
         <button id="74+" class="notekey septimal">74+<br><u>L</u></button>
     </div>
     <div id="row7" class="keyrow">
-        <button id="7b5" class="notekey septimal">7b5<br><u>M</u></button>
+        <button id="7b5" class="notekey septimal">7♭5<br><u>M</u></button>
     </div>
 </div>
 
