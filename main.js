@@ -1,5 +1,19 @@
-var synth = new Tone.PolySynth(8, Tone.MonoSynth);
-synth.set("volume", -50); 
+props = {
+	oscillator : {
+  	type : 'triangle8'
+  },
+  envelope : {
+  	attack : 0.03,
+    decay : 1,
+    sustain: 0.7,
+    release: 2
+  }
+};
+
+var synth = new Tone.PolySynth(8, Tone.Synth);
+synth.set("volume", -30); 
+synth.set(props);
+
 synth.toMaster();
 
 var vol = new Tone.Volume(-24);
@@ -41,6 +55,10 @@ function setTonic(hz) {
         "b3":  octave(hz, hz/5*3),
         "b7":  octave(hz, hz/5*3*3),
         "b2-": octave(hz, hz/5/3),
+        "7b3": octave(hz, hz/3*7),
+        "7b7": octave(hz, hz*7),
+        "74+": octave(hz, hz*7*3),
+        "7b5": octave(hz, hz/5*7),
     }
 }
 
@@ -111,6 +129,11 @@ window.onkeyup = function(e) {
         synth.triggerRelease(hz);
     }
     pressedKeys[key] = false;
+}
+
+function updateTonic() {
+    var hz = document.getElementById("tonicInput").value;
+    setTonic(hz)
 }
 
 setTonic(261.63);

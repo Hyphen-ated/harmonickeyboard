@@ -2,7 +2,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Harmonic Lattice Keyboard</title>
 </head>
+
+<p>The tonic is <input id="tonicInput" type="number" value="261.63" step="0.01" onchange="updateTonic()">hz</p>
 <div id="keys">
     <div id="row1" class="keyrow">
         <button id="#7" class="notekey">#7<br><u>6</u></button>
@@ -32,6 +35,14 @@
         <button id="b6" class="notekey">b6<br><u>X</u></button>
         <button id="b3" class="notekey">b3<br><u>C</u></button>
         <button id="b7" class="notekey">b7<br><u>V</u></button>
+    </div>
+    <div id="row6" class="keyrow">
+        <button id="7b3" class="notekey septimal">7b3<br><u>J</u></button>
+        <button id="7b7" class="notekey septimal">7b7<br><u>K</u></button>
+        <button id="74+" class="notekey septimal">74+<br><u>L</u></button>
+    </div>
+    <div id="row7" class="keyrow">
+        <button id="7b5" class="notekey septimal">7b5<br><u>M</u></button>
     </div>
 </div>
 

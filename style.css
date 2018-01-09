@@ -1,5 +1,5 @@
 .notekey {
-    background-color: #2C8F40;
+    background-color: #2C8F90;
     border: none;
     color: white;
     
@@ -9,8 +9,22 @@
     text-decoration: none;
     display: inline-block;
     font-size: 26px;
-    margin: 10px 10px;
+    margin: 30px 30px;
     border-radius: 50%;
+    pointer-events:all;
+}
+
+
+[id='1'] {
+    background-color: #2C8F40;
+}
+
+.septimal {
+    width: 60px;
+    height: 60px;
+    margin: 40px 40px;
+    font-size: 21px;
+    background-color: #5C8F90;
 }
 
 .notekey:active {
@@ -21,22 +35,39 @@
     background-color: #4CAF50
 }
 
+
+
 .keyrow {
     position: relative;
+    pointer-events:none;
 }
 
 #row1 {
-    left: 350px;
+    left: 490px;
 }
 
 #row2 {
-    left: 200px;
+    left: 280px;
 }
 
 #row3 {
-    left: 50px;
+    left: 70px;
 }
 
 #row5 {
-    left: 50px;
+    left: 70px;
+}
+
+#row6 {
+    top: -338px;
+    left: 215px;
+}
+
+#row7 {
+    top: -338px;
+    left: 285px;
+}
+
+#tonicInput {
+  width: 6em;
 }
