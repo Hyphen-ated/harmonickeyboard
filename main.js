@@ -21,7 +21,9 @@ var vol = new Tone.Volume(-24);
 
 var keyboard = {};
 
-noteMapping = {}
+noteMapping = {};
+
+octaveAdjustment = {};
 
 //changes the octave of the tone "hz" so it's between tonic and tonic*2
 function octave(tonic, hz) {
@@ -64,23 +66,20 @@ function setTonic(hz) {
 
 keyMapping = {};
 pressedKeys = {};
-mouseHz = -1;
+mouseNote = 0;
 document.querySelectorAll('.notekey').forEach(function(button){
 
     var keyboardKey = button.getElementsByTagName("u")[0].innerText;
     keyMapping[keyboardKey] = button.id;
+    octaveAdjustment[button.id] = 1;
 
 	var hz = 0;
 	button.addEventListener('mousedown', function(ev){
 		//play the note on mouse down
 		hz = noteMapping[ev.target.id];
-		if(keyboard[16]) { //shift to octave up
-		    hz *= 2;
-		} else if (keyboard[32]) { //space to octave down
-		    hz /= 2;
-		}
+		hz *= octaveAdjustment[ev.target.id];
 		console.log(hz);
-		mouseHz = hz;
+		mouseNote = ev.target.id;
 		synth.triggerAttack(hz);
 						
 	})
@@ -88,29 +87,43 @@ document.querySelectorAll('.notekey').forEach(function(button){
 })
 
 document.addEventListener('mouseup', function(e){
-    if (mouseHz > 0) {
-        synth.triggerRelease(mouseHz);
-        mouseHz = -1;
+    if (mouseNote != 0) {
+        var hz = noteMapping[mouseNote];
+        hz *= octaveAdjustment[mouseNote];
+        synth.triggerRelease(hz);
+        mouseNote = 0;
     }
 });
 
 
 window.onkeydown = function(e) {    
     keyboard[e.keyCode] = true;
+    if(mouseNote) {
+        if (e.keyCode == 16) { //shift    
+            var hz = noteMapping[mouseNote] * octaveAdjustment[mouseNote];
+            synth.triggerRelease(hz);
+            octaveAdjustment[mouseNote] *= 2;
+            synth.triggerAttack(hz * 2);
+            return;            
+        } else if (e.keyCode == 32) { //space
+            var hz = noteMapping[mouseNote] * octaveAdjustment[mouseNote];
+            synth.triggerRelease(hz);
+            octaveAdjustment[mouseNote] /= 2;
+            synth.triggerAttack(hz / 2);
+            return;
+        }
+    }               
+    
     var key = e.key.toUpperCase();
     if(pressedKeys[key]) return;
-    
+       
     var note = keyMapping[key];   
     if (!note) return; 
     document.getElementById(note).classList.add("keypressed");
     
-    var hz = noteMapping[note];
+    var hz = noteMapping[note] * octaveAdjustment[note];
     if (!hz) return;
-    if(keyboard[16]) { //shift to octave up
-        hz *= 2;
-    } else if (keyboard[32]) { //space to octave down
-        hz /= 2;
-    }
+    
     console.log(hz);
     synth.triggerAttack(hz);
     pressedKeys[key] = hz;
