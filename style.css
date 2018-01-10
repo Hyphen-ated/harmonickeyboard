@@ -1,5 +1,6 @@
 body {
     background-color: #fafafc;
+    font-size: 18px;
 }
 
 #keys {
@@ -28,9 +29,14 @@ body {
 }
 
 
+.standard {
+    background-color: #8C8F80;
+}
+
 [id='1'] {
     background-color: #2C8F40;
 }
+
 
 .septimal {
     width: 60px;
@@ -82,5 +88,5 @@ body {
 }
 
 #tonicInput {
-  width: 6em;
+  width: 4em;
 }
