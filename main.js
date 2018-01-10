@@ -1,4 +1,13 @@
-props = {
+var keycodeIsPressed = {}; // we're keeping track of all keys that are held down for easy reference.
+var noteNameToHz = {}; // maps the name of a note like "#5" or "7b3" to the hz of that note given the current tonic. 
+var octaveAdjustment = {}; // keep track of whether the user has pushed each note to a higher or lower tonic
+var keyLetterToNoteName = {}; // maps a letter (or number) on the qwerty keyboard to the note name like "#5" that it should play
+var mouseNoteName = 0; // note name of the button that's currently being clicked by the mouse
+
+//set up the sound synthesizer. we're just going to pass this guy a hz and then tell it when to stop playing.
+var synth = new Tone.PolySynth(8, Tone.Synth);
+synth.set("volume", -30); 
+var synthprops = {
 	oscillator : {
   	type : 'triangle8'
   },
@@ -9,21 +18,9 @@ props = {
     release: 2
   }
 };
-
-var synth = new Tone.PolySynth(8, Tone.Synth);
-synth.set("volume", -30); 
-synth.set(props);
-
+synth.set(synthprops);
 synth.toMaster();
 
-var vol = new Tone.Volume(-24);
-
-
-var keyboard = {};
-
-noteMapping = {};
-
-octaveAdjustment = {};
 
 //changes the octave of the tone "hz" so it's between tonic and tonic*2
 function octave(tonic, hz) {
@@ -37,7 +34,7 @@ function octave(tonic, hz) {
 }
 
 function setTonic(hz) {
-    noteMapping = {
+    noteNameToHz = {
         "1":   hz,
         "5":   octave(hz, hz*3),
         "2":   octave(hz, hz*3*3),
@@ -64,87 +61,85 @@ function setTonic(hz) {
     }
 }
 
-keyMapping = {};
-pressedKeys = {};
-mouseNote = 0;
-document.querySelectorAll('.notekey').forEach(function(button){
 
+function playNote(noteName) {
+    var hz = noteNameToHz[noteName];
+    if(!hz) return;
+    hz *= octaveAdjustment[noteName];
+    console.log(hz);
+    synth.triggerAttack(hz);
+}
+
+//iterate over all the buttons on the piano
+document.querySelectorAll('.notekey').forEach(function(button){
+    
+    //the underlined part is the letter of the keyboard key to play that button.
+    //this behavior is driven by that data in the html
     var keyboardKey = button.getElementsByTagName("u")[0].innerText;
-    keyMapping[keyboardKey] = button.id;
+    keyLetterToNoteName[keyboardKey] = button.id;
     octaveAdjustment[button.id] = 1;
 
 	var hz = 0;
 	button.addEventListener('mousedown', function(ev){
 		//play the note on mouse down
-		hz = noteMapping[ev.target.id];
-		hz *= octaveAdjustment[ev.target.id];
-		console.log(hz);
-		mouseNote = ev.target.id;
-		synth.triggerAttack(hz);
-						
-	})
-	
+		playNote(ev.target.id);
+		mouseNoteName = ev.target.id;						
+	})	
 })
 
 document.addEventListener('mouseup', function(e){
-    if (mouseNote != 0) {
-        var hz = noteMapping[mouseNote];
-        hz *= octaveAdjustment[mouseNote];
+    if (mouseNoteName != 0) {
+        var hz = noteNameToHz[mouseNoteName];
+        hz *= octaveAdjustment[mouseNoteName];
         synth.triggerRelease(hz);
-        mouseNote = 0;
+        mouseNoteName = 0;
     }
 });
 
 
 window.onkeydown = function(e) {   
-    if(keyboard[e.keyCode]) {
+    if(keycodeIsPressed[e.keyCode]) { 
+        //ignore all auto-repeats
         return;
     } 
-    keyboard[e.keyCode] = true;
-    if(mouseNote) {
+    keycodeIsPressed[e.keyCode] = true;
+    if(mouseNoteName) {
+        //they can change the octave of a button if they press shift/space while clicking it.
         if (e.keyCode == 16) { //shift    
-            var hz = noteMapping[mouseNote] * octaveAdjustment[mouseNote];
+            var hz = noteNameToHz[mouseNoteName] * octaveAdjustment[mouseNoteName];
             synth.triggerRelease(hz);
-            octaveAdjustment[mouseNote] *= 2;
-            synth.triggerAttack(hz * 2);
+            octaveAdjustment[mouseNoteName] *= 2;
+            playNote(mouseNoteName);
             return;            
         } else if (e.keyCode == 32) { //space
-            var hz = noteMapping[mouseNote] * octaveAdjustment[mouseNote];
+            var hz = noteNameToHz[mouseNoteName] * octaveAdjustment[mouseNoteName];
             synth.triggerRelease(hz);
-            octaveAdjustment[mouseNote] /= 2;
-            synth.triggerAttack(hz / 2);
+            octaveAdjustment[mouseNoteName] /= 2;
+            playNote(mouseNoteName);
             return;
         }
     }               
     
-    var key = e.key.toUpperCase();
-    if(pressedKeys[key]) return;
-       
-    var note = keyMapping[key];   
+    var key = e.key.toUpperCase();       
+    var note = keyLetterToNoteName[key];   
     if (!note) return; 
     document.getElementById(note).classList.add("keypressed");
     
-    var hz = noteMapping[note] * octaveAdjustment[note];
-    if (!hz) return;
-    
-    console.log(hz);
-    synth.triggerAttack(hz);
-    pressedKeys[key] = hz;
+    playNote(note);
 }
 
 window.onkeyup = function(e) {
-    keyboard[e.keyCode] = false;
+    var wasPressed = keycodeIsPressed[e.keyCode];
+    keycodeIsPressed[e.keyCode] = false;
     var key = e.key.toUpperCase();
     
-    var note = keyMapping[key];    
+    var note = keyLetterToNoteName[key];    
     if (!note) return;
     document.getElementById(note).classList.remove("keypressed");
         
-    var hz = pressedKeys[key];
-    if(hz && hz > 0) {
-        synth.triggerRelease(hz);
+    if(wasPressed) {
+        synth.triggerRelease(noteNameToHz[note]);
     }
-    pressedKeys[key] = false;
 }
 
 function updateTonic() {
@@ -228,15 +223,15 @@ var noteDefinitions =
         ["B5", 987.77],
     ];
 
-var drop = document.getElementById("keyDropdown");
+var keyDropdown = document.getElementById("keyDropdown");
 for(var i =0; i < noteDefinitions.length; ++i) {
     def = noteDefinitions[i];
     var option = document.createElement("option");
     option.text = def[0];
     option.value = def[1];
-    drop.add(option);
+    keyDropdown.add(option);
 }
-drop.value = "261.63";
+keyDropdown.value = "261.63";
 
 function updateTonicDropdown() {
     var hz = drop.options[drop.selectedIndex].value;
