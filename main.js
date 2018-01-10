@@ -96,7 +96,10 @@ document.addEventListener('mouseup', function(e){
 });
 
 
-window.onkeydown = function(e) {    
+window.onkeydown = function(e) {   
+    if(keyboard[e.keyCode]) {
+        return;
+    } 
     keyboard[e.keyCode] = true;
     if(mouseNote) {
         if (e.keyCode == 16) { //shift    
