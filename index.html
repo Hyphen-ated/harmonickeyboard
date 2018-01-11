@@ -5,8 +5,8 @@
     <title>Harmonic Lattice Piano</title>
 </head>
 <h2>Harmonic Lattice Piano</h2>
-Use mouse and/or keyboard. Your keyboard probably can't press many buttons at once.<br>
-Press shift or space while holding click to adjust the octave of a button up or down.<br>
+Use mouse and/or keyboard. Most keyboards can't press many keys at once, though.<br>
+Press shift or space while holding click to adjust the octave of a note up or down.<br>
 The tonic is <input id="tonicInput" value="261.63" onchange="updateTonic()">hz. 
 Or set it by name: <select id="keyDropdown" onchange="updateTonicDropdown()"></select>
 
@@ -51,12 +51,13 @@ Or set it by name: <select id="keyDropdown" onchange="updateTonicDropdown()"></s
 </div>
 
 <h3>About</h3>
-This is a keyboard in <a href="https://en.wikipedia.org/wiki/Just_intonation">Just Intonation</a>, with keys positioned
+This is a 2D piano in <a href="https://en.wikipedia.org/wiki/Just_intonation">Just Intonation</a>, with keys positioned
 according to their harmonic relationships.<br>
-It's based on <a href="https://www.youtube.com/watch?v=jA1C9VFqJKo">this video visualizing the harmony of a song,</a>
+It's based on <a href="https://www.youtube.com/watch?v=jA1C9VFqJKo">Gary Garrett's video visualizing the harmony of a song,</a>
 and on the <a href="http://www.garygarrett.me/?page_id=1922">blog posts explaining it.</a><br>
-Moving right represents going up by a fifth. Moving up-right represents going up by a major third. All the notes are shifted to be the same octave as the tonic.<br>
-
+Moving right represents going up by a fifth, moving up-right represents going up by a major third, and the blue notes are based on multiplying by seven.<br>
+All the notes are then shifted to be in the same octave as the tonic.<br>
+This grid could theoretically be extended infinitely in all directions, but I just stuck with the set of notes described on Gary's blog. 
 
 <script src="lib/Tone.min.js"></script>
 <script src="main.js"></script>

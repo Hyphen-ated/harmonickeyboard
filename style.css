@@ -26,6 +26,7 @@ body {
     margin: 30px 30px;
     border-radius: 50%;
     pointer-events:all;
+    transition: all 0.2s ease 0s;
 }
 
 
