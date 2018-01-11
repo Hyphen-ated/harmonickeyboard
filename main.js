@@ -234,7 +234,7 @@ for(var i =0; i < noteDefinitions.length; ++i) {
 keyDropdown.value = "261.63";
 
 function updateTonicDropdown() {
-    var hz = drop.options[drop.selectedIndex].value;
+    var hz = keyDropdown.options[keyDropdown.selectedIndex].value;
     var inp = document.getElementById("tonicInput");
     inp.value = hz;
     setTonic(hz);
