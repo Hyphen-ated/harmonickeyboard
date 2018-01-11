@@ -138,7 +138,7 @@ window.onkeyup = function(e) {
     document.getElementById(note).classList.remove("keypressed");
         
     if(wasPressed) {
-        synth.triggerRelease(noteNameToHz[note]);
+        synth.triggerRelease(noteNameToHz[note] * octaveAdjustment[note]);
     }
 }
 
